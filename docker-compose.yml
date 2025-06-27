@@ -1,0 +1,91 @@
+name: news-production
+
+version: '3'
+
+services:
+  gateway:
+    build:
+      context: ./services/gateway
+      dockerfile: Dockerfile
+    container_name: gateway-service
+    depends_on:
+      likes:
+        condition: service_healthy
+      news:
+        condition: service_healthy
+      notifications:
+        condition: service_healthy
+      users:
+        condition: service_healthy
+
+  likes:
+    build:
+      context: ./services/likes
+      dockerfile: Dockerfile
+    container_name: likes-service
+
+  news:
+    build:
+      context: ./services/news
+      dockerfile: Dockerfile
+    container_name: news-service
+
+  notifications:
+    build:
+      context: ./services/notifications
+      dockerfile: Dockerfile
+    container_name: notifications-service
+
+  users:
+    build:
+      context: ./services/users
+      dockerfile: Dockerfile
+    container_name: users-service
+
+  notifications-worker:
+    build:
+      context: ./services/notifications
+      dockerfile: Dockerfile
+    container_name: notifications-worker-service
+
+  postgres:
+    image: ${IMAGE_NAME_DATABASE}:${IMAGE_TAG_DATABASE}
+    container_name: postgres-service
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    restart: always
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U $$POSTGRES_USER" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: ${IMAGE_NAME_REDIS}:${IMAGE_TAG_REDIS}
+    container_name: redis-service
+    volumes:
+      - redis_data:/data
+    restart: always
+    healthcheck:
+      test: [ "CMD", "redis-cli", "ping" ]
+      interval: 3s
+      timeout: 10s
+      retries: 3
+
+  rabbitmq:
+    image: ${IMAGE_NAME_RABBITMQ}:${IMAGE_TAG_RABBITMQ}
+    container_name: rabbitmq-service
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
+    restart: always
+    healthcheck:
+      test: [ "CMD", "rabbitmq-diagnostics", "-q", "ping" ]
+      interval: 10s
+      timeout: 10s
+      retries: 5
+
+
+volumes:
+  postgres_data:
+  redis_data:
+  rabbitmq_data:
