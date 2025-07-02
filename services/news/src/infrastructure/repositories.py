@@ -1,13 +1,12 @@
-from typing import Sequence, List
-
-from sqlalchemy import select, desc
-from sqlalchemy.exc import NoResultFound
-from sqlalchemy.orm import Session
+from typing import List, Sequence
 
 from services.news.src.domain.models import Post
 from services.news.src.domain.repositories import PostRepository
 from services.news.src.domain.value_objects import PostId
 from services.news.src.infrastructure.models import PostDTO
+from sqlalchemy import desc, select
+from sqlalchemy.exc import NoResultFound
+from sqlalchemy.orm import Session
 
 
 class PostRepositoryImpl(PostRepository):

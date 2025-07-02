@@ -6,4 +6,3 @@ from services.shared.interface.repositories import AbstractRepository
 
 class PostRepository(AbstractRepository[Post], ABC):
     pass
-

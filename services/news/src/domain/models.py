@@ -19,7 +19,7 @@ class Post:
         description: str,
         status: PostStatus = PostStatus.DRAFT,
         created_at: datetime = datetime.now(),
-        updated_at: datetime = datetime.now()
+        updated_at: datetime = datetime.now(),
     ):
         self.id = id
         self.title = title
@@ -36,8 +36,4 @@ class Post:
 
     @staticmethod
     def create(title: str, description: str) -> "Post":
-        return Post(
-            PostId.generate(),
-            title,
-            description
-        )
+        return Post(PostId.generate(), title, description)

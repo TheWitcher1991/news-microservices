@@ -1,7 +1,6 @@
-from sqlalchemy.orm import Session
-
 from services.news.src.domain.repositories import PostRepository
 from services.news.src.domain.uow import PostUnitOfWork
+from sqlalchemy.orm import Session
 
 
 class PostUnitOfWorkImpl(PostUnitOfWork):
