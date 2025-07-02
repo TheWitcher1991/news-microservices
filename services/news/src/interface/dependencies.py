@@ -1,4 +1,6 @@
 from fastapi import Depends
+
+from services.news.src.application.usecases.create_post import CreatePostUseCase, CreatePostUseCaseImpl
 from services.news.src.domain.repositories import PostRepository
 from services.news.src.domain.uow import PostUnitOfWork
 from services.news.src.infrastructure.database import get_session
@@ -15,3 +17,9 @@ def get_post_unit_of_work(
     session: Session = Depends(get_session), post_repository: PostRepository = Depends(get_post_repository)
 ) -> PostUnitOfWork:
     return PostUnitOfWorkImpl(session, post_repository)
+
+
+def get_create_post_use_case(
+    post_repository: PostRepository = Depends(get_post_repository),
+) -> CreatePostUseCase:
+    return CreatePostUseCaseImpl(post_repository)
