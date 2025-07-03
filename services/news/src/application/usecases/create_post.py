@@ -17,5 +17,5 @@ class CreatePostUseCaseImpl(CreatePostUseCase):
 
     def execute(self, title: str, description: str = None) -> Post:
         post = Post.create(title=title, description=description)
-        self.post_repository.save(post)
+        self.post_repository.create(post)
         return post
