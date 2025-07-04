@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends
 from services.news.src.application.usecases.create_post import CreatePostUseCase
 from services.news.src.application.usecases.delete_post import DeletePostUseCase
 from services.news.src.application.usecases.find_post import FindPostUseCase
@@ -17,9 +17,7 @@ from services.news.src.interface.dependencies import (
     get_update_post_validator,
 )
 from services.news.src.presentation.request import WritablePostRequest
-from services.shared.cases.exceptions import InternalErrorResult
 from services.shared.kernel.result import Result
-from starlette import status
 
 
 class NewsRouter:
@@ -49,7 +47,7 @@ class NewsRouter:
             try:
                 post = use_case.execute(data.title, data.description)
             except Exception as e:
-                return InternalErrorResult()
+                return Result.internal_error()
 
             return Result.success(post)
 
@@ -69,7 +67,7 @@ class NewsRouter:
             try:
                 post = use_case.execute(id, data.title, data.description, data.status)
             except Exception as e:
-                return InternalErrorResult()
+                return Result.internal_error()
 
             return Result.success(post)
 
@@ -79,7 +77,7 @@ class NewsRouter:
             try:
                 post = use_case.execute(id)
             except Exception as e:
-                return InternalErrorResult()
+                return Result.internal_error()
 
             return Result.success(post)
 
@@ -89,7 +87,7 @@ class NewsRouter:
             try:
                 post = use_case.execute(id)
             except Exception as e:
-                return InternalErrorResult()
+                return Result.internal_error()
 
             return Result.success(post)
 
@@ -99,6 +97,6 @@ class NewsRouter:
             try:
                 post = use_case.execute()
             except Exception as e:
-                return InternalErrorResult()
+                return Result.internal_error()
 
             return Result.success(post)

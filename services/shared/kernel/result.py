@@ -1,6 +1,7 @@
 from typing import Any
 
 from services.shared.kernel.error_list import ErrorList
+from services.shared.kernel.errors import Errors
 
 
 class Result:
@@ -23,3 +24,7 @@ class Result:
     @staticmethod
     def failure(errors: ErrorList):
         return Result(is_success=False, errors=errors)
+
+    @staticmethod
+    def internal_error():
+        return Result(is_success=False, errors=Errors.internal().to_list())

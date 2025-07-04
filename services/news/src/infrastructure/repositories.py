@@ -38,6 +38,14 @@ class PostRepositoryImpl(PostRepository):
     def update(self, entity: Post) -> None:
         dto = PostDTO.from_entity(entity)
 
+        self.session.query(PostDTO).filter_by(id=dto.id).update({
+            "title": dto.title,
+            "description": dto.description,
+            "status": dto.status,
+            "created_at": dto.created_at,
+            "updated_at": dto.updated_at
+        })
+
     def find_all(self) -> List[Post]:
         stmt = select(PostDTO).order_by(desc(PostDTO.created_at))
 
