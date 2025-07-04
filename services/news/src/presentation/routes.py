@@ -17,6 +17,7 @@ from services.news.src.interface.dependencies import (
     get_update_post_validator,
 )
 from services.news.src.presentation.request import WritablePostRequest
+from services.shared.cases.exceptions import InternalErrorResult
 from services.shared.kernel.result import Result
 from starlette import status
 
@@ -48,7 +49,7 @@ class NewsRouter:
             try:
                 post = use_case.execute(data.title, data.description)
             except Exception as e:
-                raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR)
+                return InternalErrorResult()
 
             return Result.success(post)
 
@@ -68,7 +69,7 @@ class NewsRouter:
             try:
                 post = use_case.execute(id, data.title, data.description, data.status)
             except Exception as e:
-                raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR)
+                return InternalErrorResult()
 
             return Result.success(post)
 
@@ -88,7 +89,7 @@ class NewsRouter:
             try:
                 post = use_case.execute(id)
             except Exception as e:
-                raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR)
+                return InternalErrorResult()
 
             return Result.success(post)
 
@@ -98,6 +99,6 @@ class NewsRouter:
             try:
                 post = use_case.execute()
             except Exception as e:
-                raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR)
+                return InternalErrorResult()
 
             return Result.success(post)
