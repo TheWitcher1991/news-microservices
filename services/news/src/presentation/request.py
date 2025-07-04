@@ -1,7 +1,6 @@
 from typing import Optional
 
 from pydantic import BaseModel, Field
-
 from services.news.src.domain.enums import PostStatus
 
 
