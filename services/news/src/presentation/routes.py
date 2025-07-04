@@ -79,7 +79,7 @@ class NewsRouter:
             try:
                 post = use_case.execute(id)
             except Exception as e:
-                raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR)
+                return InternalErrorResult()
 
             return Result.success(post)
 
