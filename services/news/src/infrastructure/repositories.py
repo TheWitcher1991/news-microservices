@@ -4,7 +4,8 @@ from services.news.src.domain.models import Post
 from services.news.src.domain.repositories import PostRepository
 from services.news.src.domain.value_objects import PostId
 from services.news.src.infrastructure.models import PostDTO
-from sqlalchemy import desc, select
+from services.news.src.presentation.request import PostFilter
+from sqlalchemy import and_, desc, select
 from sqlalchemy.exc import NoResultFound
 from sqlalchemy.orm import Session
 
@@ -38,16 +39,28 @@ class PostRepositoryImpl(PostRepository):
     def update(self, entity: Post) -> None:
         dto = PostDTO.from_entity(entity)
 
-        self.session.query(PostDTO).filter_by(id=dto.id).update({
-            "title": dto.title,
-            "description": dto.description,
-            "status": dto.status,
-            "created_at": dto.created_at,
-            "updated_at": dto.updated_at
-        })
+        self.session.query(PostDTO).filter_by(id=dto.id).update(
+            {
+                "title": dto.title,
+                "description": dto.description,
+                "status": dto.status,
+                "created_at": dto.created_at,
+                "updated_at": dto.updated_at,
+            }
+        )
 
-    def find_all(self) -> List[Post]:
+    def find_all(self, filters: PostFilter) -> List[Post]:
         stmt = select(PostDTO).order_by(desc(PostDTO.created_at))
+
+        conditions = []
+
+        if filters.title:
+            conditions.append(PostDTO.title.ilike(f"%{filters.title}%"))
+        if filters.status:
+            conditions.append(PostDTO.status == filters.status.value)
+
+        if conditions:
+            stmt = stmt.where(and_(*conditions))
 
         try:
             result: Sequence[PostDTO] = self.session.execute(stmt).scalars().all()

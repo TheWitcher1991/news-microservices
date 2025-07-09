@@ -15,7 +15,7 @@ class AbstractRepository(ABC, Generic[_T]):
         raise NotImplementedError()
 
     @abstractmethod
-    def find_all(self) -> List[_T]:
+    def find_all(self, *args, **kwargs) -> List[_T]:
         raise NotImplementedError()
 
     @abstractmethod

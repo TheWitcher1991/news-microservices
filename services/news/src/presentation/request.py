@@ -8,3 +8,8 @@ class WritablePostRequest(BaseModel):
     title: str = Field(min_length=1, max_length=255)
     description: str = Field(max_length=3000)
     status: Optional[PostStatus] = Field(..., description="Статус поста: draft или published")
+
+
+class PostFilter(BaseModel):
+    title: Optional[str] = None
+    status: Optional[PostStatus] = None

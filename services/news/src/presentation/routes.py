@@ -16,7 +16,7 @@ from services.news.src.interface.dependencies import (
     get_update_post_use_case,
     get_update_post_validator,
 )
-from services.news.src.presentation.request import WritablePostRequest
+from services.news.src.presentation.request import PostFilter, WritablePostRequest
 from services.shared.kernel.result import Result
 
 
@@ -93,9 +93,9 @@ class NewsRouter:
 
     def find_posts_route(self):
         @self.router.get("/")
-        async def find_post(use_case: FindPostsUseCase = Depends(get_find_posts_use_case)):
+        async def find_post(filters: PostFilter, use_case: FindPostsUseCase = Depends(get_find_posts_use_case)):
             try:
-                post = use_case.execute()
+                post = use_case.execute(filters)
             except Exception as e:
                 return Result.internal_error()
 
